@@ -1,0 +1,188 @@
+/* =========================
+   BASE DASHBOARD SECTION
+========================= */
+
+.dash-section {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  background: #f6f8fb;
+  min-height: 100vh;
+}
+
+.dash-section h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.dash-section h4 {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #374151;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* row layout card */
+.card.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* =========================
+   FORMS
+========================= */
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.form input {
+  flex: 1;
+  min-width: 180px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  outline: none;
+  transition: 0.2s;
+}
+
+.form input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #3b82f6;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.form button:hover {
+  background: #2563eb;
+}
+
+/* =========================
+   LIST / TABLE STYLE
+========================= */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+/* approve */
+button:first-child {
+  background: #22c55e;
+  color: white;
+}
+
+button:first-child:hover {
+  background: #16a34a;
+}
+
+/* decline */
+button:last-child {
+  background: #ef4444;
+  color: white;
+}
+
+button:last-child:hover {
+  background: #dc2626;
+}
+
+/* neutral buttons */
+button.secondary {
+  background: #6b7280;
+  color: white;
+}
+
+/* =========================
+   STAT CARDS (OVERVIEW)
+========================= */
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card h4 {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.stat-card p {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+.stat-card.success {
+  border-left: 5px solid #22c55e;
+}
+
+.stat-card.warning {
+  border-left: 5px solid #f59e0b;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .card.row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form {
+    flex-direction: column;
+  }
+
+  .form input,
+  .form button {
+    width: 100%;
+  }
+}

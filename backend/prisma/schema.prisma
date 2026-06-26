@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////
+
+enum Role {
+  ADMIN
+  MANAGER
+  TELLER
+  MEMBER
+}
+
+enum MemberStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ACTIVE
+  COMPLETED
+}
+
+enum TransactionType {
+  DEPOSIT
+  LOAN_REPAYMENT
+  DIVIDEND
+}
+
+//////////////////////////////////////////////////
+// USER
+//////////////////////////////////////////////////
+
+model User {
+  id       Int     @id @default(autoincrement())
+  fullName String
+  email    String  @unique
+  password String
+  role     Role    @default(MEMBER)
+  isActive Boolean @default(true)
+
+  member          Member?
+  depositsCreated Deposit[] @relation("TellerDeposits") // ✅ teller tracking
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////////////////
+// BRANCH
+//////////////////////////////////////////////////
+
+model Branch {
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
+  address String?
+
+  members Member[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////////////////
+// MEMBER
+//////////////////////////////////////////////////
+
+model Member {
+  id           Int     @id @default(autoincrement())
+  memberNumber String  @unique
+  nationalId   String  @unique
+  phone        String
+  address      String?
+
+  shareCapital Float @default(0)
+
+  status MemberStatus @default(PENDING)
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  branchId Int?
+  branch   Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  savings      Saving[]
+  deposits     Deposit[]
+  loans        Loan[]
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////////////////////////////////
+// SAVING
+//////////////////////////////////////////////////
+
+model Saving {
+  id       Int    @id @default(autoincrement())
+  memberId Int
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  balance Float @default(0)
+
+  createdAt DateTime @default(now())
+}
+
+//////////////////////////////////////////////////
+// DEPOSIT
+//////////////////////////////////////////////////
+
+model Deposit {
+  id       Int    @id @default(autoincrement())
+  memberId Int
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  amount Float
+
+  tellerId Int?                                                              // ✅ which teller made the deposit
+  teller   User? @relation("TellerDeposits", fields: [tellerId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+}
+
+//////////////////////////////////////////////////
+// LOAN
+//////////////////////////////////////////////////
+
+model Loan {
+  id       Int    @id @default(autoincrement())
+  memberId Int
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  amount       Float
+  interestRate Float
+  balance      Float
+
+  status LoanStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+}
+
+//////////////////////////////////////////////////
+// TRANSACTION
+//////////////////////////////////////////////////
+
+model Transaction {
+  id       Int     @id @default(autoincrement())
+  memberId Int?
+  member   Member? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+
+  type   TransactionType
+  amount Float
+
+  reference String?
+
+  createdAt DateTime @default(now())
+}

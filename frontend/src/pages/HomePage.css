@@ -1,0 +1,283 @@
+.home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--cream);
+}
+
+/* NAV */
+.home-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2.5rem;
+  background: var(--pine);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.home-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.home-nav__stamp {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--ochre);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ochre);
+  letter-spacing: 0.05em;
+}
+.home-nav__name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--white);
+}
+.home-nav__login {
+  background: var(--ochre);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.home-nav__login:hover { background: var(--ochre-light); color: var(--gray-900); }
+
+/* HERO */
+.home-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 5rem 2.5rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+.home-hero__content { flex: 1; }
+.home-hero__eyebrow {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pine-light);
+  margin-bottom: 1rem;
+}
+.home-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--pine);
+  margin-bottom: 1.25rem;
+}
+.home-hero__title em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.home-hero__sub {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--gray-600);
+  max-width: 480px;
+  margin-bottom: 2rem;
+}
+.home-hero__actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  background: var(--pine);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-primary:hover { background: var(--pine-mid); transform: translateY(-1px); }
+.btn-ghost {
+  color: var(--pine);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-bottom: 2px solid var(--ochre);
+  padding-bottom: 2px;
+  transition: color 0.2s;
+}
+.btn-ghost:hover { color: var(--ochre); }
+
+/* PASSBOOK */
+.home-hero__visual { flex: 0 0 320px; }
+.passbook {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 1.75rem 1.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+  border-top: 5px solid var(--pine);
+}
+.passbook::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--pine), var(--ochre));
+}
+.passbook__header {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pine);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+.passbook__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0;
+  border-bottom: 1px dashed var(--gray-200);
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}
+.passbook__row strong { color: var(--gray-900); font-weight: 600; }
+.passbook__stamp {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.25rem;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid var(--ochre);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  line-height: 1.3;
+  color: var(--ochre);
+  opacity: 0.4;
+  transform: rotate(-12deg);
+}
+
+/* STATS */
+.home-stats {
+  background: var(--pine);
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  padding: 2.5rem 2rem;
+}
+.home-stats__item {
+  flex: 1;
+  max-width: 220px;
+  text-align: center;
+  padding: 0 1.5rem;
+  border-right: 1px solid rgba(255,255,255,0.12);
+}
+.home-stats__item:last-child { border-right: none; }
+.home-stats__number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ochre-light);
+}
+.home-stats__label {
+  display: block;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.65);
+  margin-top: 0.3rem;
+  letter-spacing: 0.04em;
+}
+
+/* ABOUT */
+.home-about {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 5rem 2.5rem;
+  width: 100%;
+}
+.home-about__title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--pine);
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+.home-about__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+.home-about__card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.home-about__card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+.home-about__icon { font-size: 2rem; margin-bottom: 0.9rem; }
+.home-about__card h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--pine);
+  margin-bottom: 0.5rem;
+}
+.home-about__card p {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--gray-600);
+}
+
+/* FOOTER */
+.home-footer {
+  margin-top: auto;
+  background: var(--gray-900);
+  display: flex;
+  justify-content: space-between;
+  padding: 1.25rem 2.5rem;
+  font-size: 0.8rem;
+  color: var(--gray-400);
+}
+
+@media (max-width: 768px) {
+  .home-hero {
+    flex-direction: column;
+    padding: 3rem 1.5rem 2.5rem;
+  }
+  .home-hero__visual { width: 100%; }
+  .passbook { max-width: 360px; margin: 0 auto; }
+  .home-stats { flex-wrap: wrap; gap: 1rem; }
+  .home-stats__item { border-right: none; }
+  .home-about { padding: 3rem 1.5rem; }
+  .home-footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  .home-nav { padding: 1rem 1.25rem; }
+}
