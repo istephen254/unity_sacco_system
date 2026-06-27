@@ -17,9 +17,27 @@ const PORT = process.env.PORT || 5000;
 //////////////////////////////////////////////////
 app.use(helmet());
 
+//////////////////////////////////////////////////
+// 🌐 CORS — allows local dev + Render frontend
+//////////////////////////////////////////////////
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  process.env.FRONTEND_URL, // set this on Render to your frontend URL
+].filter(Boolean); // removes undefined if FRONTEND_URL not set
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: (origin, callback) => {
+      // allow requests with no origin (Postman, mobile apps, curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked: ${origin}`));
+    },
     credentials: true,
   })
 );
@@ -42,8 +60,6 @@ const branchRoutes = require("./routes/branchRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const userRoutes = require("./routes/userRoutes");
-
-// ✅ ADDED: MANAGER ROUTES (FIX FOR YOUR ERROR)
 const managerRoutes = require("./routes/managerRoutes");
 
 //////////////////////////////////////////////////
@@ -53,18 +69,13 @@ const managerRoutes = require("./routes/managerRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/members", memberRoutes);
 app.use("/api/loans", loanRoutes);
-
-// ✅ IMPORTANT: deposits base path
 app.use("/api/deposits", depositRoutes);
-
 app.use("/api/savings", savingRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/branches", branchRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
-
-// ✅ FIX: manager endpoints (THIS FIXES /api/manager/members)
 app.use("/api/manager", managerRoutes);
 
 //////////////////////////////////////////////////
@@ -136,6 +147,9 @@ const server = app.listen(PORT, () => {
   console.log("   /api/dashboard");
   console.log("   /api/users");
   console.log("   /api/manager");
+  console.log("====================================");
+  console.log(`🌐 Allowed Origins:`);
+  allowedOrigins.forEach((o) => console.log(`   ${o}`));
   console.log("====================================");
   console.log("");
 });
