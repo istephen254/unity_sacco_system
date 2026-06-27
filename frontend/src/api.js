@@ -4,8 +4,15 @@ import axios from "axios";
 // 🌐 AXIOS INSTANCE
 //////////////////////////////////////////////////
 
+// Auto-detect environment safely
+const isProduction = import.meta.env.PROD;
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    (isProduction
+      ? "https://unity-sacco-backend.onrender.com/api" // ← explicit prod fallback
+      : "http://localhost:5000/api"),
   timeout: 15000,
 });
 
@@ -41,7 +48,8 @@ api.interceptors.response.use(
     const status = error.response?.status;
     const data = error.response?.data;
 
-    const message = data?.message || error.message || "Unknown API error";
+    const message =
+      data?.message || error.message || "Unknown API error";
 
     //////////////////////////////////////////////////
     // 🚨 AUTH ERROR HANDLING
