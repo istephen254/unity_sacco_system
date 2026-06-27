@@ -292,7 +292,7 @@ async function getMemberTransactions(req, res) {
 }
 
 //////////////////////////////////////////////////
-// ➕ CREATE MEMBER
+// ➕ CREATE MEMBER  ← FIXED
 //////////////////////////////////////////////////
 async function createMember(req, res) {
   try {
@@ -307,6 +307,13 @@ async function createMember(req, res) {
       branchId,
     } = req.body;
 
+    // Validate required fields before touching the DB
+    if (!fullName || !email || !nationalId || !phone || !branchId) {
+      return res.status(400).json({
+        message: "fullName, email, nationalId, phone and branchId are required.",
+      });
+    }
+
     const hashedPwd = await bcrypt.hash(password || "1234", 10);
 
     const user = await prisma.user.create({
@@ -319,7 +326,6 @@ async function createMember(req, res) {
     });
 
     const count = await prisma.member.count();
-
     const memberNumber = `M-${String(count + 1).padStart(4, "0")}`;
 
     const member = await prisma.member.create({
@@ -327,10 +333,10 @@ async function createMember(req, res) {
         memberNumber,
         nationalId,
         phone,
-        address,
-        shareCapital: shareCapital || 0,
+        address: address || null,                          // empty string → null
+        shareCapital: shareCapital ? parseFloat(shareCapital) : 0, // string → float
         userId: user.id,
-        branchId,
+        branchId: branchId || null,                        // empty string → null
       },
       include: MEMBER_INCLUDE,
     });
@@ -348,38 +354,41 @@ async function createMember(req, res) {
 
     if (err.code === "P2002") {
       return res.status(409).json({
-        message: "Email or National ID already exists",
+        message: "Email or National ID already exists.",
       });
     }
 
     return res.status(500).json({
-      message: "Server error",
+      message: "Server error creating member.",
+      detail: err.message,   // exposes real Prisma error for debugging
     });
   }
 }
 
 //////////////////////////////////////////////////
-// ✏️ UPDATE MEMBER
+// ✏️ UPDATE MEMBER  ← FIXED
 //////////////////////////////////////////////////
 async function updateMember(req, res) {
   try {
-    const {
-      phone,
-      address,
-      branchId,
-      shareCapital,
-    } = req.body;
+    const { phone, address, branchId, shareCapital, status } = req.body;
+
+    // Only include fields that were actually sent — prevents nulling out untouched fields
+    const data = {};
+    if (phone        !== undefined) data.phone        = phone;
+    if (address      !== undefined) data.address      = address;
+    if (branchId     !== undefined) data.branchId     = branchId || null;
+    if (shareCapital !== undefined) data.shareCapital = parseFloat(shareCapital);
+    if (status       !== undefined) data.status       = status; // ACTIVE / INACTIVE / SUSPENDED
+
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ message: "No fields provided to update." });
+    }
 
     const member = await prisma.member.update({
       where: {
         id: req.params.id,
       },
-      data: {
-        phone,
-        address,
-        branchId,
-        shareCapital,
-      },
+      data,
       include: MEMBER_INCLUDE,
     });
 
@@ -387,7 +396,7 @@ async function updateMember(req, res) {
   } catch (err) {
     console.error("❌ UPDATE MEMBER:", err);
     return res.status(500).json({
-      message: "Server error",
+      message: "Server error updating member.",
     });
   }
 }
